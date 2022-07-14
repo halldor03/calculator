@@ -1,0 +1,87 @@
+* {
+  box-sizing: border-box;
+  font-family: andale;
+  font-size: 50px;
+}
+body {
+  margin: 0px;
+  padding: 0px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: beige;
+}
+
+#calculatorBody {
+  border: solid 7px black;
+  border-radius: 20px;
+  padding: 15px;
+  background-color: gray;
+}
+
+#calculatorDisplay {
+  border: solid 5px black;
+  text-align: right;
+  justify-items: center;
+  font-size: 100px;
+  font-weight: bold;
+  padding: 0px 0px;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.645);
+  color: rgb(0, 255, 51);
+}
+
+#calculatorKeypad {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-areas:
+    "function operation"
+    "numeric operation";
+}
+
+#numericKeys {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: repeat(3, 150px);
+  grid-template-rows: repeat(4, 100px);
+  grid-template-areas: "zero zero";
+  grid-area: numeric;
+}
+
+.zeroKey {
+  grid-column-start: zero;
+  grid-column-end: zero;
+}
+
+#functionKeys {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: repeat(3, 150px);
+  grid-template-rows: repeat(1, 100px);
+  grid-area: function;
+}
+
+#operationKeys {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: repeat(1, 150px);
+  grid-template-rows: repeat(4, 100px);
+  grid-area: operation;
+}
+
+#numericKeys > button {
+  background-color: lightgray;
+  border-radius: 10px;
+}
+
+#functionKeys > button {
+  background-color: dodgerblue;
+  border-radius: 10px;
+}
+
+#operationKeys > button {
+  background-color: #ff8f1f;
+  border-radius: 10px;
+}
