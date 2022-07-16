@@ -1,35 +1,21 @@
-const add = function (firstNumber, nextNumber) {
+const add = function (firstN, nextN) {
   let result = firstNumber + nextNumber;
   return result;
 };
 
-const substract = function (firstNumber, nextNumber) {
+const substract = function (firstN, nextN) {
   let result = firstNumber - nextNumber;
   return result;
 };
 
-const multiply = function (firstNumber, nextNumber) {
+const multiply = function (firstN, nextN) {
   let result = firstNumber * nextNumber;
   return result;
 };
 
-const divide = function (firstNumber, nextNumber) {
+const divide = function (firstN, nextN) {
   let result = firstNumber / nextNumber;
   return result;
-};
-
-const operate = function (firstNumber, nextNumber, operatorType) {
-  console.log(typeof firstNumber);
-  console.log(typeof operatorType);
-  if (operatorType === "+") {
-    return add(firstNumber, nextNumber);
-  } else if (operatorType === "-") {
-    return substract(firstNumber, nextNumber);
-  } else if (operatorType === "*") {
-    return multiply(firstNumber, nextNumber);
-  } else if (operatorType === "/") {
-    return divide(firstNumber, nextNumber);
-  }
 };
 
 const populateDisplay = function (key) {
@@ -42,54 +28,63 @@ const populateDisplay = function (key) {
     );
   }
   if (keyPushed === ".") {
-    console.log("hi");
-    let decimalButton = document.querySelector(".decimalPointKey");
     decimalButton.removeEventListener("click", populateDisplay);
   }
+  firstNumber = Number(outputNumber);
 };
+const decimalButton = document.querySelector(".decimalPointKey");
 const numericKeys = document.querySelectorAll("div#numericKeys>button");
 numericKeys.forEach((key) => key.addEventListener("click", populateDisplay));
 
 const calculatorFunctions = function (key) {
   let keyPushed = key.path[0].outerText;
   if (keyPushed === "AC") {
-    let display = document.querySelector("#calculatorDisplay");
-    let clearDisplay = (display.textContent = "");
+    display.textContent = "";
+    numericKeys.forEach((key) =>
+      key.addEventListener("click", populateDisplay)
+    );
   }
   // if (keyPushed === "C") {
   // }
   // if (keyPushed === "\xB1") {
   // }
 };
+const display = document.querySelector("#calculatorDisplay");
 const functionKeys = document.querySelectorAll("div#functionKeys>button");
 functionKeys.forEach((key) =>
   key.addEventListener("click", calculatorFunctions)
 );
 
-// const operands = {
-//   firstNumber: 0,
-//   secondNumber: 0,
-// };
-// console.log(operands);
+const operands = {
+  firstNumber: 0,
+  nextNumber: 10,
+};
+console.log(operands);
+let firstNumber = operands.firstNumber;
+let nextNumber = operands.nextNumber;
 
-const calculatorOperations = function (key) {
+const operate = function (key, firstN, nextN) {
   let keyPushed = key.path[0].outerText;
   switch (true) {
-    case keyPushed === "\xF7":
-      console.log("Divided");
-      break;
-    case keyPushed === "\xD7":
-      console.log("Times");
+    case keyPushed === "+":
+      display.textContent = "";
       break;
     case keyPushed === "\u2212":
       console.log("Minus");
+      console.log(substract(firstNumber, nextNumber));
       break;
-    case keyPushed === "+":
-      console.log("Plus");
+    case keyPushed === "\xD7":
+      console.log("Times");
+      console.log(multiply(firstNumber, nextNumber));
+      break;
+    case keyPushed === "\xF7":
+      console.log("Divided");
+      console.log(divide(firstNumber, nextNumber));
+      break;
+    case keyPushed === "=":
+      display.textContent = add(firstNumber, nextNumber);
       break;
   }
 };
 const operationKeys = document.querySelectorAll("div#operationKeys>button");
-operationKeys.forEach((key) =>
-  key.addEventListener("click", calculatorOperations)
-);
+operationKeys.forEach((key) => key.addEventListener("click", operate));
