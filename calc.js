@@ -1,3 +1,12 @@
+const operands = {
+  currentNumber: 0,
+  firstNumber: 0,
+  nextNumber: 0,
+};
+let currentNumber = operands.currentNumber;
+let firstNumber = operands.firstNumber;
+let nextNumber = operands.nextNumber;
+
 const add = function (firstN, nextN) {
   let result = firstNumber + nextNumber;
   return result;
@@ -20,7 +29,6 @@ const divide = function (firstN, nextN) {
 
 const populateDisplay = function (key) {
   let keyPushed = key.path[0].outerText;
-  let display = document.querySelector("#calculatorDisplay");
   let outputNumber = (display.textContent += keyPushed);
   if (outputNumber.length === 9) {
     numericKeys.forEach((key) =>
@@ -30,8 +38,10 @@ const populateDisplay = function (key) {
   if (keyPushed === ".") {
     decimalButton.removeEventListener("click", populateDisplay);
   }
-  firstNumber = Number(outputNumber);
+  currentNumber = Number(outputNumber);
+  return currentNumber;
 };
+const display = document.querySelector("#calculatorDisplay");
 const decimalButton = document.querySelector(".decimalPointKey");
 const numericKeys = document.querySelectorAll("div#numericKeys>button");
 numericKeys.forEach((key) => key.addEventListener("click", populateDisplay));
@@ -49,25 +59,23 @@ const calculatorFunctions = function (key) {
   // if (keyPushed === "\xB1") {
   // }
 };
-const display = document.querySelector("#calculatorDisplay");
 const functionKeys = document.querySelectorAll("div#functionKeys>button");
 functionKeys.forEach((key) =>
   key.addEventListener("click", calculatorFunctions)
 );
 
-const operands = {
-  firstNumber: 0,
-  nextNumber: 10,
-};
-console.log(operands);
-let firstNumber = operands.firstNumber;
-let nextNumber = operands.nextNumber;
-
 const operate = function (key, firstN, nextN) {
   let keyPushed = key.path[0].outerText;
   switch (true) {
     case keyPushed === "+":
-      display.textContent = "";
+      numericKeys.forEach((key) =>
+        key.addEventListener("click", populateDisplay)
+      );
+      firstNumber = currentNumber;
+      console.log("");
+      console.log("Current number: " + currentNumber);
+      console.log("First number: " + firstNumber);
+      console.log("Second number: " + nextNumber);
       break;
     case keyPushed === "\u2212":
       console.log("Minus");
@@ -82,7 +90,14 @@ const operate = function (key, firstN, nextN) {
       console.log(divide(firstNumber, nextNumber));
       break;
     case keyPushed === "=":
-      display.textContent = add(firstNumber, nextNumber);
+      nextNumber = currentNumber;
+      let result = add(firstNumber, nextNumber);
+      display.textContent = result;
+      result = currentNumber;
+      console.log("Current number: " + currentNumber);
+      console.log("First number: " + firstNumber);
+      console.log("Second number: " + nextNumber);
+      console.log("");
       break;
   }
 };
