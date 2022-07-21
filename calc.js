@@ -1,10 +1,8 @@
 const mem = {
-  currentNumber: null,
-  firstNumber: null,
-  nextNumber: null,
-  operator: null,
+  firstNumber: "",
+  nextNumber: "",
+  operator: undefined,
 };
-let currentNumber = mem.currentNumber;
 let firstNumber = mem.firstNumber;
 let nextNumber = mem.nextNumber;
 let operator = mem.operator;
@@ -39,9 +37,11 @@ const divide = function (firstN, nextN) {
 const calculatorFunctions = function (key) {
   let keyPushed = key.path[0].outerText;
   if (keyPushed === "AC") {
-    firstNumber = 0;
-    nextNumber = 0;
+    firstNumber = "";
+    nextNumber = "";
+    operator = undefined;
     display.innerText = "";
+    decimalButton.disabled = false;
   }
   // if (keyPushed === "C") {
   // }
@@ -52,47 +52,42 @@ functionKeys.forEach((key) =>
   key.addEventListener("click", calculatorFunctions)
 );
 
-const populateDisplay = function () {
-  for (let i = 0; i < numericKeys.length; i++) {
-    numericKeys[i].addEventListener("click", () => {
-      let keyPushed = numericKeys[i].value;
-      let outputNumber = (display.innerText += keyPushed);
-      if (outputNumber.length > 9) {
-        display.innerText = outputNumber.substring(0, 9);
-      }
-      if (outputNumber.includes(".")) {
-        decimalButton.disabled = true;
-      }
-      currentNumber = parseFloat(outputNumber);
-      return currentNumber;
-    });
+const addNumber = function (num) {
+  if (firstNumber.length > 9) {
+    firstNumber = firstNumber.substring(0, 9);
   }
+  if (num === ".") {
+    decimalButton.disabled = true;
+  }
+  firstNumber = parseFloat(firstNumber + num);
+  return firstNumber;
 };
 
-const inputNumber = function () {
-  if (display.innerText === "") {
-    populateDisplay();
-  }
+const updateDisplay = function () {
+  display.innerText = parseFloat(firstNumber);
 };
-inputNumber();
+
+numericKeys.forEach((key) =>
+  key.addEventListener("click", () => {
+    addNumber(key.innerText);
+    updateDisplay();
+  })
+);
 
 const inputOperator = function (key) {
   let keyPushed = key.path[0].outerText;
   switch (true) {
     case keyPushed === "+":
-      decimalButton.disabled = false;
-      firstNumber = currentNumber;
-      display.innerText = "";
-      for (let i = 0; i < numericKeys.length; i++) {
-        numericKeys[i].addEventListener("click", () => {
-          nextNumber = parseFloat(display.innerText);
-          console.log("First number: " + firstNumber);
-          console.log("Second number: " + nextNumber);
-          return nextNumber;
-        });
-      }
+      console.log("First number: " + firstNumber);
+      numericKeys.forEach((key) =>
+        key.addEventListener("click", () => {
+          display.innerText = key.innerText;
+          nextNumber = display.innerText;
+          console.log(nextNumber);
+        })
+      );
+      return (operator = "+");
   }
-  return (operator = "+");
 };
 operationKeys.forEach((key) => key.addEventListener("click", inputOperator));
 
@@ -101,7 +96,8 @@ const operate = function (op) {
   console.log("Second number: " + nextNumber);
   switch (true) {
     case operator === "+":
-      return console.log("Sum: " + add(firstNumber, nextNumber));
+      decimalButton.disabled = false;
+      return (display.innerText = add(firstNumber, nextNumber));
     case "-":
       return substract(firstNumber, nextNumber);
     case "*":
